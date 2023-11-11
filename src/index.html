@@ -61,6 +61,7 @@
                 <div class="modal-body">
                     <p id="def_ans"></p>
                     <p id="conj_ans"></p>
+                    <p id="extra"></p>
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" data-bs-dismiss="modal" type="button">Close</button>
@@ -69,10 +70,18 @@
         </div>
     </div>
 
-
     <div class="spacer-1"></div>
     <h2 id="result"></h2>
     <h2 id="num_result"></h2>
+
+    <div class="spacer-1"></div>
+
+    <button class="btn btn-warning" data-bs-placement="bottom" data-bs-toggle="tooltip" id="gen_sentences"
+            title="You can only click this once/minute. Don't exploit this or ban."
+            type="button">
+        Generate Practice Sentences
+    </button>
+
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>

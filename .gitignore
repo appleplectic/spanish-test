@@ -7,6 +7,9 @@ node_modules/
 *.css
 *.css.map
 
+# Allow SpanishVerbs JS file
+!src/js/sv-bundle.js
+
 # Cache
 .eslintcache
 

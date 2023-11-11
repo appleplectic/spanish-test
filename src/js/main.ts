@@ -1,6 +1,11 @@
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 declare const spanishVerbs: any;
 
+const tooltipTriggerList = [].slice.call(document.querySelectorAll("[data-bs-toggle=\"tooltip\"]"));
+tooltipTriggerList.map(function (tooltipTriggerEl) {
+    return new bootstrap.Tooltip(tooltipTriggerEl);
+});
+
 const checkDef = $("#checkDef")[0] as HTMLInputElement;
 const checkConj = $("#checkConj")[0] as HTMLInputElement;
 const def_hid = $("#def_hid")[0];
@@ -62,6 +67,7 @@ function new_conj() {
     const verb = csv[verb_i][0];
     const subjects = ["Yo", "Tú", "Él/Ella/Usted", "Nosotros", "Vosotros", "Ellos/Ellas/Ustedes"];
     const sub_i = Math.floor(Math.random() * 6);
+    const extra_notes = csv[verb_i][2];
     $("#conj")[0].innerHTML = subjects[sub_i] + " " + csv[verb_i][0];
     conj.focus();
 
@@ -70,6 +76,7 @@ function new_conj() {
 
     $("#def_ans")[0].innerHTML = def_answer;
     $("#conj_ans")[0].innerHTML = conj_answer;
+    $("#extra")[0].innerHTML = extra_notes;
 }
 
 conj.addEventListener("keyup", function (event) {
@@ -109,4 +116,12 @@ $("#sub")[0].addEventListener("click", function () {
         conj.focus();
     }
     $("#num_result")[0].innerHTML = `${num_correct} / ${num_total} - ${Math.round((num_correct / num_total) * 100)}%`;
+});
+
+const genSentence = $("#gen_sentences")[0] as HTMLButtonElement;
+genSentence.addEventListener("click", function () {
+    genSentence.disabled = true;
+    setTimeout(function () {
+        genSentence.disabled = false;
+    }, 60000);
 });
