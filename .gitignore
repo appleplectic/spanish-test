@@ -4,7 +4,6 @@ node_modules/
 # Compiled FIles
 *.js
 *.js.map
-*.d.ts
 *.css
 *.css.map
 

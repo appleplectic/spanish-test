@@ -1,9 +1,6 @@
 {
-  "dependencies": {
-    "@types/jquery": "^3.5.27",
-    "jquery": "^3.7.1"
-  },
   "devDependencies": {
+    "@types/papaparse": "^5.3.11",
     "@typescript-eslint/eslint-plugin": "^6.10.0",
     "@typescript-eslint/parser": "^6.10.0",
     "eslint": "^8.53.0",
@@ -12,5 +9,10 @@
     "eslint-plugin-n": "^16.3.1",
     "eslint-plugin-promise": "^6.1.1",
     "typescript": "^5.2.2"
+  },
+  "dependencies": {
+    "@types/jquery": "^3.5.27",
+    "jquery": "^3.7.1",
+    "spanish-verbs": "^3.3.0"
   }
 }
