@@ -20,7 +20,6 @@ jobs:
       
       - name: Compile TypeScript
         run: |
-          cd src
           find . -type f -name "*.ts" -print0 | xargs -0 -I {} sed -i '1s/^/\/\/ @ts-nocheck\n/' {}
           npm install -g typescript
           tsc
