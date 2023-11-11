@@ -1,9 +1,8 @@
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-declare const spanishVerbs: any;
-
 const tooltipTriggerList = [].slice.call(document.querySelectorAll("[data-bs-toggle=\"tooltip\"]"));
 tooltipTriggerList.map(function (tooltipTriggerEl) {
-    return new bootstrap.Tooltip(tooltipTriggerEl);
+    return new bootstrap.Tooltip(tooltipTriggerEl, {
+        trigger: "hover"
+    });
 });
 
 const checkDef = $("#checkDef")[0] as HTMLInputElement;
@@ -14,19 +13,24 @@ const conj_hid = $("#conj_hid")[0];
 checkDef.checked = true;
 checkConj.checked = true;
 
-checkDef.addEventListener("change", function () {
-    if (!checkConj.checked && !checkDef.hidden) {
-        checkConj.checked = true;
-    }
-    def_hid.hidden = !checkDef.checked;
+checkDef.addEventListener("change", () => {
+    onChange(checkDef);
+});
+checkConj.addEventListener("change", () => {
+    onChange(checkConj);
 });
 
-checkConj.addEventListener("change", function () {
-    if (!checkDef.checked && !checkConj.hidden) {
-        checkDef.checked = true;
+function onChange(check: HTMLInputElement) {
+    if (!checkDef.checked && !checkConj.checked) {
+        if (check === checkDef) {
+            checkConj.checked = true;
+        } else {
+            checkDef.checked = true;
+        }
     }
     conj_hid.hidden = !checkConj.checked;
-});
+    def_hid.hidden = !checkDef.checked;
+}
 
 const inputElement = $("#formFile")[0];
 let csv: [string[]];
@@ -64,19 +68,18 @@ function new_conj() {
     conj.value = "";
     def.value = "";
     const verb_i = Math.floor(Math.random() * csv.length);
-    const verb = csv[verb_i][0];
     const subjects = ["Yo", "Tú", "Él/Ella/Usted", "Nosotros", "Vosotros", "Ellos/Ellas/Ustedes"];
     const sub_i = Math.floor(Math.random() * 6);
-    const extra_notes = csv[verb_i][2];
+    // const extra_notes = csv[verb_i][2];
     $("#conj")[0].innerHTML = subjects[sub_i] + " " + csv[verb_i][0];
     conj.focus();
 
-    conj_answer = spanishVerbs.getConjugation(verb, csv[verb_i][3], sub_i);
+    conj_answer = csv[verb_i][2 + sub_i];
     def_answer = csv[verb_i][1];
 
     $("#def_ans")[0].innerHTML = def_answer;
     $("#conj_ans")[0].innerHTML = conj_answer;
-    $("#extra")[0].innerHTML = extra_notes;
+    // $("#extra")[0].innerHTML = extra_notes;
 }
 
 conj.addEventListener("keyup", function (event) {
