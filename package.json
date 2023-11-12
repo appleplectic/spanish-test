@@ -14,8 +14,6 @@
     "@types/bootstrap": "^5.2.9",
     "@types/jquery": "^3.5.27",
     "bootstrap": "^5.3.2",
-    "jquery": "^3.7.1",
-    "spanish-verbs": "^3.3.0",
-    "spanishconjugator": "^2.0.1"
+    "jquery": "^3.7.1"
   }
 }
