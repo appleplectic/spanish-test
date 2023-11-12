@@ -27,6 +27,10 @@ jobs:
           npm install -g sass
           sass src/:src/
 
+      - name: Create CNAME
+        run: |
+          echo appleplectic.org > src/CNAME
+
       - name: Publish to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
