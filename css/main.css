@@ -1,0 +1,192 @@
+body {
+  padding: 17px;
+}
+
+#csvSettings {
+  max-width: 600px;
+}
+
+.spacer-1 {
+  padding: 12px;
+}
+
+.spacer-2 {
+  padding-top: 5px;
+  padding-left: 3px;
+}
+
+.top-right {
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin: 8px;
+}
+.top-right p {
+  font-size: 14px;
+}
+@media (min-width: 600px) {
+  .top-right {
+    margin: 25px;
+  }
+  .top-right p {
+    font-size: 16px;
+  }
+}
+
+#genSentences {
+  pointer-events: auto;
+}
+
+.form-group {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.btn {
+  white-space: nowrap;
+}
+
+.no-padding-after {
+  margin: 0;
+}
+
+.d-inline-block {
+  width: auto;
+  height: 25px;
+}
+
+.invisible {
+  display: none;
+}
+
+.wrap-text {
+  width: 100%;
+  max-width: 600px;
+}
+
+.center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.horizontal-center {
+  display: flex;
+  justify-content: center;
+}
+
+.max-width {
+  width: 35vw;
+  min-width: 300px;
+}
+
+.label-input-container {
+  width: fit-content;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: left;
+}
+
+.flashcard {
+  width: 30vw;
+  min-width: 200px;
+  height: 37vh;
+  perspective: 1000px;
+  position: relative;
+  cursor: pointer;
+}
+
+.flashcard .front,
+.flashcard .back {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  backface-visibility: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.32);
+  transition: transform 0.5s;
+}
+
+.flashcard .front {
+  background-color: #ffffff;
+  z-index: 2;
+  transform-style: preserve-3d;
+}
+
+.flashcard .back {
+  background-color: #ffffff;
+  transform: rotateX(-180deg);
+  transform-style: preserve-3d;
+}
+
+.flashcard.flip .front {
+  transform: rotateX(180deg);
+}
+
+.flashcard.flip .back {
+  transform: rotateX(0deg);
+}
+
+@keyframes flyOffRight {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(100vw);
+    opacity: 0;
+  }
+}
+@keyframes flyOnRight {
+  from {
+    transform: translateX(-100vw);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+.flashcard.fly-off-right {
+  animation: flyOffRight 0.2s forwards;
+}
+
+.flashcard.fly-on-right {
+  animation: flyOnRight 0.2s forwards;
+}
+
+@keyframes flyOffLeft {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(-100vw);
+    opacity: 0;
+  }
+}
+@keyframes flyOnLeft {
+  from {
+    transform: translateX(100vw);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+.flashcard.fly-off-left {
+  animation: flyOffLeft 0.5s forwards;
+}
+
+.flashcard.fly-on-left {
+  animation: flyOnLeft 0.5s forwards;
+}
+
+/*# sourceMappingURL=main.css.map */
