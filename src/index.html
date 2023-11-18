@@ -13,9 +13,13 @@
 <body>
 <h1>Spanish Thing</h1>
 <div class="top-right">
-    <p>Made by Levin & Ethan</p>
+    <p class="no-padding-after">Made by Levin & Ethan</p>
     <p class="no-padding-after">If this helped you,</p>
     <p class="no-padding-after">please buy us food :D</p>
+    <div class="spacer-2"></div>
+    <script src='https://storage.ko-fi.com/cdn/widget/Widget_2.js' type='text/javascript'></script>
+    <script type='text/javascript'>kofiwidget2.init("Donate to Levin", "#29abe0", "Z8Z7R9F6I");
+    kofiwidget2.draw();</script>
 </div>
 <div class="spacer-1"></div>
 
@@ -52,8 +56,42 @@
 </div>
 <div class="spacer-1"></div>
 
-<div class="invisible center larger" id="hid">
+<div class="invisible center" id="hid">
+    <div class="flashcard">
+        <div class="front">
+            <h2 id="frontH"></h2>
+        </div>
+        <div class="back">
+            <h2 id="backH"></h2>
+        </div>
+    </div>
+
+    <div class="spacer-2"></div>
+
+    <div class="horizontal-center">
+        <button class="btn btn-primary" id="leftArrow">
+            <svg class="bi bi-arrow-left" fill="currentColor" height="30" viewBox="0 0 16 16" width="30"
+                 xmlns="http://www.w3.org/2000/svg">
+                <path d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"
+                      fill-rule="evenodd"/>
+            </svg>
+        </button>
+        <div class="spacer-2"></div>
+        <button class="btn btn-primary" id="rightArrow">
+            <svg class="bi bi-arrow-right" fill="currentColor" height="30" viewBox="0 0 16 16" width="30"
+                 xmlns="http://www.w3.org/2000/svg">
+                <path d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"
+                      fill-rule="evenodd"/>
+            </svg>
+        </button>
+    </div>
+
+    <div class="spacer-1"></div>
+    <div class="spacer-1"></div>
+    <div class="spacer-1"></div>
+
     <h2 id="conj"></h2>
+
     <div class="spacer-1"></div>
 
     <div id="defHide">

@@ -1,3 +1,4 @@
+// Enable All Tooltips
 const tooltipTriggerList = [].slice.call(document.querySelectorAll("[data-bs-toggle=\"tooltip\"]"));
 tooltipTriggerList.map(function (tooltipTriggerEl) {
     return new bootstrap.Tooltip(tooltipTriggerEl, {
@@ -5,6 +6,7 @@ tooltipTriggerList.map(function (tooltipTriggerEl) {
     });
 });
 
+// Positioning of Sliders
 const checkDef = $("#checkDef")[0] as HTMLInputElement;
 const checkConj = $("#checkConj")[0] as HTMLInputElement;
 const defHide = $("#defHide")[0];
@@ -32,7 +34,7 @@ function onChange(check: HTMLInputElement) {
     defHide.hidden = !checkDef.checked;
 }
 
-const inputElement = $("#formFile")[0] as HTMLInputElement;
+// CSV Configuration
 let csv: [string[]];
 let firstLine: string[];
 
@@ -42,9 +44,14 @@ function parseCSV(results: { data: [string[]]; }) {
     if (data[data.length - 1][0] === "") {
         data.pop();
     }
+
     $("#hid")[0].classList.toggle("invisible", false);
 
     csv = data;
+
+    $("#frontH")[0].innerHTML = csv[0][0];
+    $("#backH")[0].innerHTML = csv[0][1];
+
     newConjugation();
 }
 
@@ -72,6 +79,7 @@ $("#regPast")[0].addEventListener("click", function () {
     loadCSVFromOnline("https://raw.githubusercontent.com/appleplectic/spanish-csv/main/regpreterite.csv");
 });
 
+const inputElement = $("#formFile")[0] as HTMLInputElement;
 inputElement.addEventListener("change", function (event) {
     const fileInput = event.target as HTMLInputElement;
     if ((fileInput.files == null) || fileInput.files.length === 0) {
@@ -85,6 +93,7 @@ inputElement.addEventListener("change", function (event) {
     });
 });
 
+// Conjugation/Definition Stuff
 let conjAnswer: string, defAnswer: string;
 let numCorrect: number = 0, numTotal: number = 0;
 const conj = $("#conjInput")[0] as HTMLInputElement;
@@ -156,6 +165,82 @@ $("#sub")[0].addEventListener("click", function () {
     $("#numResult")[0].innerHTML = `${numCorrect} / ${numTotal} - ${Math.round((numCorrect / numTotal) * 100)}%`;
 });
 
+// Generation of Practice Sentences
+function getSentence(csv: [string[]], i: number, refAnswerList: { [id: number]: string }, tryAgain: boolean = true) {
+    const verbIndex = Math.floor(Math.random() * csv.length);
+    let wrongVerbIndex = Math.floor(Math.random() * csv.length);
+    while (wrongVerbIndex === verbIndex) {
+        wrongVerbIndex = Math.floor(Math.random() * csv.length);
+    }
+    const verb = csv[verbIndex][0];
+    const possibleVerbs = csv[verbIndex].slice(2, 8);
+    const wrongVerb = csv[wrongVerbIndex][0];
+    const verbTense = csv[verbIndex][8];
+
+    const url = new URL("https://api-backend.appleplectic.org:3030/");
+    const params = {
+        verb: verb,
+        tense: verbTense
+    };
+    url.search = new URLSearchParams(params).toString();
+    fetch(url)
+        .then(response => {
+            if (response.status === 500) {
+                throw new Error("Internal Server Error: 500");
+            }
+            return response.text();
+        })
+        .then(data => {
+            console.log(data);
+            let answer = "";
+            for (const pverb of possibleVerbs) {
+                if (data.includes(pverb)) {
+                    const splitted = data.split(" " + pverb + " ");
+                    if (splitted[0] === data) {
+                        continue;
+                    }
+                    answer = pverb;
+                    break;
+                }
+            }
+            const sentence = $(`#sentence${i}`)[0];
+            sentence.style.color = "rgb(0,0,0)";
+            sentence.classList.toggle("invisible", false);
+
+            if (answer === "") {
+                throw new Error("Verb Not Found");
+            }
+
+            const splitted = data.split(" " + answer + " ");
+
+            let randomArr = [wrongVerb, verb];
+            if (Math.round(Math.random()) === 1) {
+                randomArr = randomArr.reverse();
+            }
+
+            sentence.innerHTML = `${splitted[0]}
+<input class="form-control d-inline-block" id="blank${i}" type="text">
+${splitted[1]} (${randomArr[0]}/${randomArr[1]})`;
+            refAnswerList[i] = answer;
+        })
+        .catch(error => {
+            console.error("Error: ", error);
+            const sentence = $(`#sentence${i}`)[0];
+            sentence.classList.toggle("invisible", false);
+
+            if (error.toString().includes("Verb Not Found")) {
+                if (tryAgain) {
+                    getSentence(csv, i, refAnswerList, false);
+                } else {
+                    sentence.innerHTML = "";
+                }
+            } else {
+                sentence.innerHTML = "Errored. Try waiting a few minutes before pressing again; if the error recurs, contact Levin or donate!";
+            }
+        });
+    return "";
+}
+
 const genSentence = $("#genSentences")[0] as HTMLButtonElement;
 genSentence.addEventListener("click", function () {
     genSentence.disabled = true;
@@ -169,88 +254,118 @@ genSentence.addEventListener("click", function () {
     const answerList: { [id: number]: string; } = {};
 
     for (let i = 1; i < 6; i++) {
-        const verbIndex = Math.floor(Math.random() * csv.length);
-        let wrongVerbIndex = Math.floor(Math.random() * csv.length);
-        while (wrongVerbIndex === verbIndex) {
-            wrongVerbIndex = Math.floor(Math.random() * csv.length);
+        const answer = getSentence(csv, i, answerList);
+        if (answer) {
+            answerList[i] = answer;
         }
-        const verb = csv[verbIndex][0];
-        const possibleVerbs = csv[verbIndex].slice(2, 8);
-        const wrongVerb = csv[wrongVerbIndex][0];
-        const verbTense = csv[verbIndex][8];
-
-        const url = new URL("https://api-backend.appleplectic.org:3030/");
-        const params = {
-            verb: verb,
-            tense: verbTense
-        };
-        url.search = new URLSearchParams(params).toString();
-        fetch(url)
-            .then(response => {
-                if (response.status === 500) {
-                    throw new Error("Internal Server Error: 500");
-                }
-                return response.text();
-            })
-            .then(data => {
-                console.log(data);
-                let answer = "";
-                for (const pverb of possibleVerbs) {
-                    if (data.includes(pverb)) {
-                        answer = pverb;
-                        break;
-                    }
-                }
-                answerList[i] = answer;
-                const sentence = $(`#sentence${i}`)[0];
-                sentence.style.color = "rgb(0,0,0)";
-                sentence.classList.toggle("invisible", false);
-
-                if (answer === "") {
-                    throw new Error("Verb Not Found");
-                }
-
-                const splitted = data.split(answer);
-                let randomArr = [wrongVerb, verb];
-                if (Math.round(Math.random()) === 1) {
-                    randomArr = randomArr.reverse();
-                }
-
-                sentence.innerHTML = `${splitted[0]}
-<input class="form-control d-inline-block" id="blank${i}" type="text">
-${splitted[1]} (${randomArr[0]}/${randomArr[1]})`;
-            })
-            .catch(error => {
-                console.error("Error: ", error);
-                const sentence = $(`#sentence${i}`)[0];
-                sentence.classList.toggle("invisible", false);
-
-                if (error.toString().includes("Verb Not Found")) {
-                    sentence.innerHTML = "An normal error occurred; please ignore.";
-                } else {
-                    sentence.innerHTML = "Try waiting a few minutes before pressing again; if the error recurs, contact Levin.";
-                }
-            });
     }
 
     subSentences.addEventListener("click", function () {
         let numCorrect = 0;
         let numTotal = 0;
-        for (let i = 1; i < 6; i++) {
-            const answer = answerList[i];
-            if (answer !== "") {
-                const hElem = $(`#sentence${i}`)[0];
-                const inputElem = $(`#blank${i}`)[0] as HTMLInputElement;
-                if (inputElem.value === answer) {
-                    hElem.style.color = "rgb(0,255,0)";
-                    numCorrect++;
-                } else {
-                    hElem.style.color = "rgb(255,0,0)";
-                }
-                numTotal++;
+        for (const [key, answer] of Object.entries(answerList)) {
+            const hElem = $(`#sentence${key}`)[0];
+            const inputElem = $(`#blank${key}`)[0] as HTMLInputElement;
+            if (inputElem.value === answer) {
+                hElem.style.color = "rgb(0,255,0)";
+                numCorrect++;
+            } else {
+                hElem.style.color = "rgb(255,0,0)";
             }
+            numTotal++;
         }
 
         $("#senResult")[0].innerHTML = `${numCorrect} / ${numTotal} - ${Math.round((numCorrect / numTotal) * 100)}%`;
     });
 });
+
+// Debounce
+function debounce(func: () => void, wait: number) {
+    let canClick = true;
+
+    return function () {
+        if (!canClick) {
+            return;
+        }
+        func();
+
+        canClick = false;
+        setTimeout(() => canClick = true, wait);
+    };
+}
+
+// Flashcard
+$(".flashcard")[0].addEventListener("click", function () {
+    this.classList.toggle("flip");
+});
+
+const debouncedLeftArrowClick = debounce(handleLeftArrowClick, 200);
+const debouncedRightArrowClick = debounce(handleRightArrowClick, 200);
+
+// Flashcard Arrows
+$("#leftArrow")[0].addEventListener("click", debouncedLeftArrowClick);
+$("#rightArrow")[0].addEventListener("click", debouncedRightArrowClick);
+
+let index = 0;
+
+function handleLeftArrowClick() {
+    index--;
+    if (index < 0) {
+        index = csv.length - 1;
+    }
+    handleArrowClick(false);
+}
+
+function handleRightArrowClick() {
+    index++;
+    if (index > csv.length - 1) {
+        index = 0;
+    }
+    handleArrowClick(true);
+}
+
+function handleArrowClick(left: boolean) {
+    const currentFlashcard = document.querySelector(".flashcard") as HTMLElement;
+    currentFlashcard.classList.remove("fly-off-left");
+    currentFlashcard.classList.remove("fly-off-right");
+    currentFlashcard.classList.remove("fly-on-left");
+    currentFlashcard.classList.remove("fly-on-right");
+
+    if (left) {
+        currentFlashcard.classList.add("fly-off-left");
+    } else {
+        currentFlashcard.classList.add("fly-off-right");
+    }
+
+    setTimeout(() => {
+        currentFlashcard.remove();
+
+        const newFlashcard = document.createElement("div");
+        if (left) {
+            newFlashcard.className = "flashcard fly-on-left";
+        } else {
+            newFlashcard.className = "flashcard fly-on-right";
+        }
+
+        const front = document.createElement("div");
+        front.className = "front";
+        const frontP = document.createElement("h2");
+        frontP.innerHTML = csv[index][0];
+        front.appendChild(frontP);
+        newFlashcard.appendChild(front);
+
+        const back = document.createElement("div");
+        back.className = "back";
+        const backP = document.createElement("h2");
+        backP.innerHTML = csv[index][1];
+        back.appendChild(backP);
+        newFlashcard.appendChild(back);
+
+        $("#hid")[0].prepend(newFlashcard);
+
+        newFlashcard.addEventListener("click", function () {
+            this.classList.toggle("flip");
+        });
+
+    }, 200);
+}
