@@ -271,6 +271,20 @@ const debouncedRightArrowClick = debounce(handleRightArrowClick, 200);
 // Flashcard Arrows
 $("#leftArrow")[0].addEventListener("click", debouncedLeftArrowClick);
 $("#rightArrow")[0].addEventListener("click", debouncedRightArrowClick);
+document.addEventListener("keydown", function (key) {
+    const cursorInInput = key.target instanceof HTMLElement && (key.target.nodeName === "INPUT" || key.target.nodeName === "TEXTAREA" || key.target.isContentEditable);
+    if (["ArrowLeft", "ArrowRight"].indexOf(key.code) > -1 && !cursorInInput) {
+        key.preventDefault();
+    }
+    if (cursorInInput)
+        return;
+    if (key.key === "ArrowRight") {
+        debouncedRightArrowClick();
+    }
+    else if (key.key === "ArrowLeft") {
+        debouncedLeftArrowClick();
+    }
+});
 let index = 0;
 function handleLeftArrowClick() {
     index--;
