@@ -274,8 +274,8 @@ genSentence.addEventListener("click", function () {
     });
 });
 // Debounce
+let canClick = true;
 function debounce(func, wait) {
-    let canClick = true;
     return function () {
         if (!canClick) {
             return;
