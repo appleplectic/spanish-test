@@ -10,15 +10,35 @@ tooltipTriggerList.map(function (tooltipTriggerEl) {
 // Positioning of Sliders
 const checkDef = $("#checkDef")[0];
 const checkConj = $("#checkConj")[0];
+const checkFlash = $("#checkFlashcard")[0];
 const defHide = $("#defHide")[0];
 const conjHide = $("#conjHide")[0];
+const flashHide = $("#flashcardHide")[0];
+const allHide = $("#allHide")[0];
 checkDef.checked = true;
 checkConj.checked = true;
+checkFlash.checked = false;
+flashHide.hidden = true;
 checkDef.addEventListener("change", () => {
     onChange(checkDef);
 });
 checkConj.addEventListener("change", () => {
     onChange(checkConj);
+});
+checkFlash.addEventListener("change", () => {
+    if (checkFlash.checked) {
+        checkDef.checked = false;
+        checkConj.checked = false;
+        allHide.hidden = true;
+    }
+    else {
+        checkDef.checked = true;
+        checkConj.checked = true;
+        allHide.hidden = false;
+    }
+    conjHide.hidden = !checkConj.checked;
+    defHide.hidden = !checkDef.checked;
+    flashHide.hidden = !checkFlash.checked;
 });
 function onChange(check) {
     if (!checkDef.checked && !checkConj.checked) {
@@ -29,8 +49,11 @@ function onChange(check) {
             checkDef.checked = true;
         }
     }
+    checkFlash.checked = false;
+    allHide.hidden = false;
     conjHide.hidden = !checkConj.checked;
     defHide.hidden = !checkDef.checked;
+    flashHide.hidden = !checkFlash.checked;
 }
 // CSV Configuration
 let csv;
@@ -333,7 +356,7 @@ function handleArrowClick(left) {
         backP.innerHTML = csv[index][1];
         back.appendChild(backP);
         newFlashcard.appendChild(back);
-        $("#hid")[0].prepend(newFlashcard);
+        $("#flashcardHide")[0].prepend(newFlashcard);
         newFlashcard.addEventListener("click", function () {
             this.classList.toggle("flip");
         });
