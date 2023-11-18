@@ -302,9 +302,9 @@ genSentence.addEventListener("click", function () {
 });
 
 // Debounce
-function debounce(func: () => void, wait: number) {
-    let canClick = true;
+let canClick = true;
 
+function debounce(func: () => void, wait: number) {
     return function () {
         if (!canClick) {
             return;
