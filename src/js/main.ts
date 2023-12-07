@@ -94,6 +94,10 @@ function loadCSVFromOnline(url: string) {
 }
 
 $("#useDefault")[0].addEventListener("click", function () {
+    loadCSVFromOnline("https://raw.githubusercontent.com/appleplectic/spanish-csv/main/imperfect.csv");
+});
+
+$("#irregPast")[0].addEventListener("click", function () {
     loadCSVFromOnline("https://raw.githubusercontent.com/appleplectic/spanish-csv/main/1127quiz.csv");
 });
 
