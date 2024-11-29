@@ -95,7 +95,15 @@ function loadCSVFromOnline(url: string) {
 }
 
 $("#useDefault")[0].addEventListener("click", function () {
-    loadCSVFromOnline("https://raw.githubusercontent.com/appleplectic/spanish-csv/main/1127quiz.csv");
+    loadCSVFromOnline("https://raw.githubusercontent.com/appleplectic/spanish-csv/main/subPres.csv");
+});
+
+$("#imperfect")[0].addEventListener("click", function () {
+    loadCSVFromOnline("https://raw.githubusercontent.com/appleplectic/spanish-csv/main/imperfect.csv");
+});
+
+$("#irregPast")[0].addEventListener("click", function () {
+    loadCSVFromOnline("https://raw.githubusercontent.com/appleplectic/spanish-csv/main/irregPast.csv");
 });
 
 $("#regPresent")[0].addEventListener("click", function () {
@@ -103,11 +111,11 @@ $("#regPresent")[0].addEventListener("click", function () {
 });
 
 $("#irregPresent")[0].addEventListener("click", function () {
-    loadCSVFromOnline("https://raw.githubusercontent.com/appleplectic/spanish-csv/main/irregpres.csv");
+    loadCSVFromOnline("https://raw.githubusercontent.com/appleplectic/spanish-csv/main/irregPres.csv");
 });
 
 $("#regPast")[0].addEventListener("click", function () {
-    loadCSVFromOnline("https://raw.githubusercontent.com/appleplectic/spanish-csv/main/regpreterite.csv");
+    loadCSVFromOnline("https://raw.githubusercontent.com/appleplectic/spanish-csv/main/regPast.csv");
 });
 
 const inputElement = $("#formFile")[0] as HTMLInputElement;
@@ -270,7 +278,7 @@ ${splitted[1]} (${randomArr[0]}/${randomArr[1]})`;
                     sentence.innerHTML = "";
                 }
             } else {
-                sentence.innerHTML = "Errored. Try waiting a few minutes before pressing again; if the error recurs, contact Levin or donate!";
+                sentence.innerHTML = "Errored. Try waiting a few minutes before pressing again.";
             }
         });
     return "";
